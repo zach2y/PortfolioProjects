@@ -1,6 +1,8 @@
 /*
 Covid 19 Data Exploration 
+
 Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types
+
 Link to Datasets: https://github.com/MoH-Malaysia/covid19-public (Up to 21 October 2022)
 */
 
@@ -22,6 +24,7 @@ Select *
 From PortfolioProject..population
 order by Convert(int, idxs)
 
+
 -- Join Cases, Deaths and Population
 
 Select *
@@ -32,6 +35,7 @@ Full Join PortfolioProject..deaths_state as dea
 	On cas.state = dea.state
 	and cas.date = dea.date
 order by cas.state, cas.date
+
 
 -- Total Cases vs Total Deaths
 -- Shows likelihood of dying if you contract covid in your state
@@ -57,6 +61,7 @@ Full Join PortfolioProject..deaths_state as dea
 Select *, (cumul_deaths/cumul_cases)*100 as death_percent
 From CasvsDea
 Where state in ('Selangor', 'W.P. Kuala Lumpur', 'W.P. Putrajaya')
+
 
 -- Total Cases vs Population
 -- Shows what percentage of population infected with Covid
@@ -93,12 +98,14 @@ Select *, (cumul_cases/population)*100 as infected_percent
 From #PopulationInfectedDeaths
 Where state in ('Selangor', 'W.P. Kuala Lumpur', 'W.P. Putrajaya')
 
+
 -- States with Highest Infection Rate compared to Population
 
 Select state, population, MAX(cumul_cases) as high_infect_count,  Max((cumul_cases/population))*100 as infected_percent
 From #PopulationInfectedDeaths
 Group by state, population
 order by infected_percent desc
+
 
 -- States with Highest Death Count per Population
 
@@ -107,10 +114,12 @@ From #PopulationInfectedDeaths
 Group by state, population
 order by death_percent desc
 
+
 -- Country numbers
 
 Select SUM(new_cases) as total_cases, SUM(new_deaths) as total_deaths, SUM(new_deaths)/SUM(new_Cases)*100 as death_percent
 From #PopulationInfectedDeaths
+
 
 -- Total Population vs Vaccinations
 -- Shows Percentage of Population that has completed a full dose, a first booster and a second booster
@@ -123,6 +132,7 @@ From PortfolioProject..vax_state as vax
 Join PortfolioProject..population as pop
 	On vax.state = pop.state
 order by 2,1
+
 
 -- Creating View to store data for later visualizations
 
